@@ -15,6 +15,16 @@ const Home = () => (
       <Link href="/search">
         <a>search</a>
       </Link>
+
+      <br />
+      <Link href="/search?topic=react">
+        <a>search react</a>
+      </Link>
+
+      <br />
+      <Link href="/user">
+        <a>user repos (pagination)</a>
+      </Link>
     </div>
 
     <style jsx>{`

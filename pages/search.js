@@ -5,11 +5,13 @@ import { useState } from "react"
 import { useRouter } from "next/dist/client/router"
 
 const SEARCH_REPOS_URL = "/search/repositories"
+
 const REACT_REPOS_QUERY = gql`
   query repoList($topic: String!) {
     repos(topic: $topic)
       @rest(type: "RepoList", path: "${SEARCH_REPOS_URL}?q={args.topic}") {
       items @type(name: "Repo") {
+        id
         name
         html_url
       }
@@ -18,15 +20,32 @@ const REACT_REPOS_QUERY = gql`
 `
 
 const List = ({ topic }) => {
-  const { loading, error, data } = useQuery(REACT_REPOS_QUERY, {
+  const { loading, error, data, fetchMore } = useQuery(REACT_REPOS_QUERY, {
     variables: { topic }
   })
+
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error 😱</div>
+
   return (
-    <pre>
-      <code>{JSON.stringify(data, null, 4)}</code>
-    </pre>
+    <>
+      <ul>
+        {data.repos.items.map(item => (
+          <li key={item.id}>
+            <a href={item.html_url}>{item.name}</a>
+          </li>
+        ))}
+
+        <style jsx>
+          {`
+            ul {
+              list-style-type: none;
+              padding-left: 0;
+            }
+          `}
+        </style>
+      </ul>
+    </>
   )
 }
 
@@ -34,7 +53,6 @@ const Search = ({ topic }) => {
   const [input, setInput] = useState(topic)
   const router = useRouter()
 
-  console.log(router)
   return (
     <div>
       <form
