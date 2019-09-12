@@ -25,6 +25,11 @@ const Home = () => (
       <Link href="/user">
         <a>user repos (pagination)</a>
       </Link>
+
+      <br />
+      <Link href="/user?user=benjamminj">
+        <a>user repos - benjamminj (pagination)</a>
+      </Link>
     </div>
 
     <style jsx>{`
